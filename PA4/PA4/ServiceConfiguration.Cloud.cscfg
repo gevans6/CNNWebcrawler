@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="PA4" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2015-04.2.6">
+  <Role name="WebRole1">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=pa4cloud;AccountKey=$(_pa4cloud.key_)" />
+      <Setting name="APPINSIGHTS_INSTRUMENTATIONKEY" value="e313d5a6-9bdd-41c2-9821-cbd781a6bf89" />
+    </ConfigurationSettings>
+  </Role>
+  <Role name="WorkerRole1">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=pa4cloud;AccountKey=$(_pa4cloud.key_)" />
+      <Setting name="APPINSIGHTS_INSTRUMENTATIONKEY" value="e313d5a6-9bdd-41c2-9821-cbd781a6bf89" />
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>

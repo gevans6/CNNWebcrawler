@@ -1,0 +1,264 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" type="text/css" />
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script language="javascript">
+        function StartCrawling() {
+            $.ajax({
+                type: "POST",
+                url: 'Admin.asmx/BeginCrawling',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    document.getElementById("stop").style.visibility = "visible";
+                    document.getElementById("start").style.visibility = "hidden";
+                    console.log("success");
+                },
+                failure: console.log("failure")
+            });
+        }
+
+        function StopCrawling() {
+            $.ajax({
+                type: "POST",
+                url: 'Admin.asmx/StopCrawling',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    document.getElementById("start").style.visibility = "visible";
+                    document.getElementById("stop").style.visibility = "hidden";
+                    console.log("success");
+                },
+                failure: console.log("failure")
+            });
+        }
+
+        function ReadTop10() {
+            $.ajax({
+                type: "POST",
+                url: 'Admin.asmx/ReadLinksFromTableStorage',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $("#last10crawled").html("Last 10 URLS Crawled: ");
+                    $("#last10crawled").append("<br/>");
+                    for (i = 0; i < 10; i++) {
+                        $("#last10crawled").append(data.d[i]);
+                        $("#last10crawled").append("<br/>");
+                        $("#last10crawled").append("<br/>");
+                    }
+                }
+            });
+        }
+
+        setInterval(ReadTop10, 500);
+
+        function GetErrors() {
+            $.ajax({
+                type: "POST",
+                url: 'Admin.asmx/GetErrors',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $("#last10errors").html("Last 10 Errors:");
+                    $("#last10errors").append("<br/>");
+                    for (i = 0; i < 10; i++) {
+                        $("#last10errors").append(data.d[i]);
+                        $("#last10errors").append("<br/>");
+                        $("#last10errors").append("<br/>");
+                    }
+                }
+            });
+        }
+
+        setInterval(GetErrors, 500);
+
+
+        function GetTitleLinkDate() {
+            $.ajax({
+                type: "POST",
+                url: 'Admin.asmx/GetTitleLinkDate',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({ url: $("#search").val() }),
+                success: function (data) {
+                    $("#searchresult").html("");
+                    $("#searchresult").append("Title: " + JSON.stringify(data.d[0]));
+                    $("#searchresult").append("<br/>");
+                    $("#searchresult").append("URL: " + JSON.stringify(data.d[1]));
+                    $("#searchresult").append("<br/>");
+                    $("#searchresult").append("Date: " + JSON.stringify(data.d[2]));
+                    $("#searchresult").append("<br/>");
+                    $("#searchresult").append("<br/>");
+                    console.log("link title: " + JSON.stringify(data.d));
+                }
+            });
+        }
+
+        function GetCPU() {
+            $.ajax({
+                type: "POST",
+                url: 'Admin.asmx/GetCPU',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $("#cpu").html("CPU: " + JSON.stringify(data.d));
+                }
+            });
+        }
+
+        setInterval(GetCPU, 500);
+
+        function GetRAM() {
+            $.ajax({
+                type: "POST",
+                url: 'Admin.asmx/GetRAM',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $("#ram").html("RAM: " + JSON.stringify(data.d));
+                }
+            });
+        }
+
+        setInterval(GetRAM, 500);
+
+        function GetSizeQueue() {
+            $.ajax({
+                type: "POST",
+                url: 'Admin.asmx/GetSizeQueue',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({}),
+                success: function (data) {
+                    $("#sizequeue").html("Size of Queue: " + JSON.stringify(data.d));
+                }
+            });
+        }
+
+        setInterval(GetSizeQueue, 500);
+
+        function GetSizeIndex() {
+            $.ajax({
+                type: "POST",
+                url: 'Admin.asmx/GetSizeIndex',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({}),
+                success: function (data) {
+                    $("#sizeindex").html("Size of Index: " + JSON.stringify(data.d));
+                }
+            });
+        }
+
+        setInterval(GetSizeIndex, 500);
+
+        function GetNumCrawled() {
+            $.ajax({
+                type: "POST",
+                url: 'Admin.asmx/GetNumCrawled',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({}),
+                success: function (data) {
+                    $("#numcrawled").html("Number of URLs Crawled: " + JSON.stringify(data.d));
+                }
+            });
+        }
+
+        setInterval(GetNumCrawled, 500);
+
+        function GetStatus() {
+            $.ajax({
+                type: "POST",
+                url: 'Admin.asmx/GetStatus',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $("#status").html("Status: " + JSON.stringify(data.d));
+                }
+            });
+        }
+
+        setInterval(GetStatus, 500);
+
+        function GetLastTitle() {
+            $.ajax({
+                type: "POST",
+                url: 'Admin.asmx/GetLastTitle',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $("#lasttitle").html("Last Title: " + JSON.stringify(data.d));
+                }
+            });
+        }
+
+        setInterval(GetLastTitle, 500);
+
+        function GetNumTitles() {
+            $.ajax({
+                type: "POST",
+                url: 'Admin.asmx/GetNumTitles',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $("#numtitles").html("Number of Titles: " + JSON.stringify(data.d));
+                }
+            });
+        }
+
+        setInterval(GetNumTitles, 500);    
+    </script>
+    
+    <meta charset="utf-8" />
+</head>
+<body>
+    <header>
+        <h1>Dashboard</h1>
+        <input value="Start Crawling" type="button" id="start" onclick="StartCrawling()"><br />
+        <input value="Stop Crawling" type="button" id="stop" onclick="StopCrawling()"><br />
+
+        <div class="row">
+            <div class="col">
+                <div class="container" id="status">Status: </div>
+                <br />
+                <div class="container" id="cpu">CPU: </div>
+                <br />
+                <div class="container" id="ram">RAM: </div>
+                <br />
+                <div class="container" id="numcrawled">Number of URLs Crawled: </div>
+                <br />
+                <div class="container" id="sizeindex">Size of Index: </div>
+                <br />
+                <div class="container" id="sizequeue">Size of Queue: </div>
+                <br />
+                <div class="container" id="lasttitle">Last Title: </div>
+                <br />
+                <div class="container" id="numtitles">Number of Titles: </div>
+                <br />
+                <br />
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div id="Search URL">Search a URL:</div>
+                    <form>
+                        <input placeholder="Search" type="text" id="search">
+                        <input value="Search" type="button" id="submit" onclick="GetTitleLinkDate()"><br />
+                    </form>
+                    <div id="searchresult"></div>
+                    <br />
+                </div>
+                <div class="col">
+                    <div id="last10crawled">Last 10 URLS Crawled: </div>
+                </div>
+
+                <div class="col">
+                    <div id="last10errors">Last 10 Errors:</div>
+                </div>
+                <div class="=" w-100"></div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

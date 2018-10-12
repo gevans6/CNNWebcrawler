@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script language="javascript">
+
+        //search the trie every 10 seconds to keep it up and running
+        function searchTrieAsync() {
+            $.ajax({
+                type: "POST",
+                url: 'Search.asmx/searchTrie',
+                data: JSON.stringify({ myInput: "a" }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+
+        //setInterval(searchTrieAsync, 1000);
+
+        function searchTrie() {
+            $.ajax({
+                type: "POST",
+                url: 'Search.asmx/searchTrie',
+                data: JSON.stringify({ myInput: $('#myInput').val() }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $("#resultsSuggest").html("");
+                    console.log(data);
+                    for (i = 0; i < data.d.length; i++) {
+                        $("#resultsSuggest").append(data.d[i]);
+                        $("#resultsSuggest").append("<br/>");
+                    }
+                    $("#resultsSuggest").append("<br/>");
+                },
+                failure: console.log("failure")
+            });
+        }
+
+        function searchResults() {
+            $.ajax({
+                type: "POST",
+                url: 'Search.asmx/searchUrls',
+                data: JSON.stringify({ input: $('#myInput').val() }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $("#resultsUrls").html("");
+                    console.log(JSON.parse(data.d));
+                    newdata = JSON.parse(data.d);
+                    for (i = 0; i < newdata.length; i++) {
+                        $('#resultsUrls').append("Title: " + newdata[i]["Item2"]);
+                        $("#resultsUrls").append("<br/>");
+                        $('#resultsUrls').append("Url: " + newdata[i]["Item1"]);
+                        $("#resultsUrls").append("<br/>");
+                        $('#resultsUrls').append("Date: " + newdata[i]["Item3"]);
+                        $("#resultsUrls").append("<br/>");
+                        $("#resultsUrls").append("<br/>");
+                    }
+                   
+                },
+                failure: console.log("failed searching")
+            });
+        }
+    </script>
+    <title></title>
+    <meta charset="utf-8" />
+    
+    
+</head>
+<body>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- side용 -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-5666480866743556"
+         data-ad-slot="3555176220"
+         data-ad-format="auto"></ins>
+    <script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+
+    <input type="text" name="data" id="myInput" placeholder="Search for titles.." onkeyup="searchTrie()">
+    <button type="button" value="search" name="search" id="searchInput" onclick="searchResults()">Search</button><br />
+    
+    <div id="resultsSuggest"></div>
+
+    <div id="resultsNBA"></div>
+
+    <div id="resultsUrls"></div>
+
+
+</body>
+</html>
